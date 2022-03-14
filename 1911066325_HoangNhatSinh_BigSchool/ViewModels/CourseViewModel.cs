@@ -12,6 +12,7 @@ namespace _1911066325_HoangNhatSinh_BigSchool.ViewModels
         [Required]
         public string Place { get; set; }
         [Required]
+        [FutureDate]
         public string Date { get; set; }
         [Required]
         public string Time { get; set; }
