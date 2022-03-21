@@ -1,4 +1,15 @@
-﻿body {
+﻿.navbar-inverse {
+    background-color: #d41d50;
+    border-color: #fbf6f6;
+}
+
+.navbar-inverse .narbar-nav > li > a {
+    color: white;
+}
+.navbar-inverse .navbar-brand {
+    color: white;
+}
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -21,4 +32,24 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+/*Course layout*/
+.course {
+    list-style:none;
+}
+.course > li{
+    position: relative;
+    margin-bottom: 30px;
+}
+.course > li .date{
+    text-align: center;
+    background-color: #d41d50;
+    color:white;
+    width:60px;
+    border-radius: 8px;
+}
+.course > li .detail {
+    position: absolute;
+    top: 0;
+    left: 70px;
 }

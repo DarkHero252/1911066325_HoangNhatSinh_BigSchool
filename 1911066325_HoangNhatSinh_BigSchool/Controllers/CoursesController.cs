@@ -3,6 +3,7 @@ using _1911066325_HoangNhatSinh_BigSchool.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -45,6 +46,46 @@ namespace _1911066325_HoangNhatSinh_BigSchool.Controllers
             _dbContext.Courses.Add(course);
             _dbContext.SaveChanges();
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public ActionResult Attending()
+        {
+            var UserId = User.Identity.GetUserId();
+
+            var Courses = _dbContext.Attendances
+                .Where(a => a.AttendeeId == UserId)
+                .Select(a => a.Course)
+                .Include(l => l.Lecturer)
+                .Include(l => l.Category)
+                .ToList();
+            var ViewModel = new CoursesViewModel
+            {
+                UpcommingCourses = Courses,
+                ShowAction = User.Identity.IsAuthenticated
+            };
+
+            return View(ViewModel);
+        }
+
+        [Authorize]
+        public ActionResult Following()
+        {
+            var UserId = User.Identity.GetUserId();
+
+            var Courses = _dbContext.Followings
+                .Where(a => a.FollowerId == UserId)
+                .Select(a => a.Course)
+                .Include(l => l.Lecturer)
+                .Include(l => l.Category)
+                .ToList();
+            var ViewModel = new CoursesViewModel
+            {
+                UpcommingCourses = Courses,
+                ShowAction = User.Identity.IsAuthenticated
+            };
+
+            return View(ViewModel);
         }
     }
 }
