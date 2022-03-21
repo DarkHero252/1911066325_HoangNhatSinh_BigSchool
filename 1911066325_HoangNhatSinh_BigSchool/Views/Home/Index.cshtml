@@ -18,10 +18,10 @@
             <div class="details">
                 <span class="lecturer">
                     @course.Lecturer.Name
-                    @*@if (Model.ShowAction)
-                    {*@
+                    @if (Model.ShowAction)
+                    {
                         <button class="btn btn-default btn-sm js-toggle-follow" data-user-id="@course.LecturerId">Follow</button>
-                    
+                    }
                 </span>
                 <span class="category">
                     @course.Category.Name

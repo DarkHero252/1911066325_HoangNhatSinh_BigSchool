@@ -8,11 +8,7 @@ using System.Web;
 namespace _1911066325_HoangNhatSinh_BigSchool.Models
 {
     public class Following
-    {
-        public Course Course { get; set; }
-        [Key]
-        [Column(Order = 1)]
-        public int CourseId { get; set; }
+    {   
         [Key]
         [Column(Order = 1)]
         public string FollowerId { get; set; }

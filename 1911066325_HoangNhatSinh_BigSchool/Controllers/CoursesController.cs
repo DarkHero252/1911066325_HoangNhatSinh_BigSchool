@@ -67,25 +67,5 @@ namespace _1911066325_HoangNhatSinh_BigSchool.Controllers
 
             return View(ViewModel);
         }
-
-        [Authorize]
-        public ActionResult Following()
-        {
-            var UserId = User.Identity.GetUserId();
-
-            var Courses = _dbContext.Followings
-                .Where(a => a.FollowerId == UserId)
-                .Select(a => a.Course)
-                .Include(l => l.Lecturer)
-                .Include(l => l.Category)
-                .ToList();
-            var ViewModel = new CoursesViewModel
-            {
-                UpcommingCourses = Courses,
-                ShowAction = User.Identity.IsAuthenticated
-            };
-
-            return View(ViewModel);
-        }
     }
 }
