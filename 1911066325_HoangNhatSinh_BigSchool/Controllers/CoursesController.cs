@@ -67,5 +67,30 @@ namespace _1911066325_HoangNhatSinh_BigSchool.Controllers
 
             return View(ViewModel);
         }
+
+        [Authorize]
+        public ActionResult Following()
+        {
+            var userId = User.Identity.GetUserId();
+            var followings = _dbContext.Followings
+                //.Where(f => f.FolloweeId == userId)
+                .Include(d => d.Followee)
+                // .Include(e => e.Follower)
+
+                .ToList();
+            return View(followings);
+        }
+
+        [Authorize]
+        public ActionResult Mine()
+        {
+            var userId = User.Identity.GetUserId();
+            var courses = _dbContext.Courses
+                .Where(c => c.LecturerId == userId && c.DateTime > DateTime.Now)
+                .Include(l => l.Lecturer)
+                .Include(c => c.Category)
+                .ToList();
+            return View(courses);
+        }
     }
 }

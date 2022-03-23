@@ -1,0 +1,23 @@
+﻿@model IEnumerable<_1911066325_HoangNhatSinh_BigSchool.Models.Following>
+@{
+    ViewBag.Title = "Following";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Following</h2>
+<ul class="following">
+    @foreach (var following in Model)
+    {
+        <li>
+
+            <div class="details">
+                <span>
+                    @following.Followee.Name
+                </span>
+
+
+            </div>
+        </li>
+    }
+</ul>
+
