@@ -52,37 +52,41 @@ namespace _1911066325_HoangNhatSinh_BigSchool.Controllers
         [Authorize]
         public ActionResult Attending()
         {
-            var UserId = User.Identity.GetUserId();
-
-            var Courses = _dbContext.Attendances
-                .Where(a => a.AttendeeId == UserId)
+            var userId = User.Identity.GetUserId();
+            var courses = _dbContext.Attendances
+                .Where(a => a.AttendeeId == userId)
                 .Select(a => a.Course)
                 .Include(l => l.Lecturer)
                 .Include(l => l.Category)
+                .Where(a => a.IsCanceled == false)
                 .ToList();
-            var ViewModel = new CoursesViewModel
+
+            var viewModel = new CoursesViewModel
             {
-                UpcommingCourses = Courses,
+                UpcommingCourses = courses,
                 ShowAction = User.Identity.IsAuthenticated
             };
 
-            return View(ViewModel);
+            return View(viewModel);
         }
 
-        [Authorize]
         public ActionResult Following()
         {
             var userId = User.Identity.GetUserId();
             var followings = _dbContext.Followings
-                //.Where(f => f.FolloweeId == userId)
-                .Include(d => d.Followee)
-                // .Include(e => e.Follower)
-
+                .Where(a => a.FollowerId == userId)
+                .Select(a => a.Followee)
                 .ToList();
-            return View(followings);
+
+            var viewModel = new FollowingViewModel
+            {
+                Followings = followings,
+                ShowAction = User.Identity.IsAuthenticated
+            };
+
+            return View(viewModel);
         }
 
-        [Authorize]
         public ActionResult Mine()
         {
             var userId = User.Identity.GetUserId();
@@ -91,7 +95,35 @@ namespace _1911066325_HoangNhatSinh_BigSchool.Controllers
                 .Include(l => l.Lecturer)
                 .Include(c => c.Category)
                 .ToList();
+
             return View(courses);
+        }
+
+        public ActionResult FollowingMeList()
+        {
+            var userId = User.Identity.GetUserId();
+            var followings = _dbContext.Followings
+                .Where(a => a.FolloweeId == userId)
+                .Select(a => a.Follower)
+                .ToList();
+
+            var viewModel = new FollowingViewModel
+            {
+                Followings = followings,
+                ShowAction = User.Identity.IsAuthenticated
+            };
+
+            return View(viewModel);
+        }
+
+        public ActionResult FollowNotification()
+        {
+            var viewModel = new FollowNotificationViewModel
+            {
+                Notifications = _dbContext.FollowingNotifications.ToList()
+            };
+
+            return View(viewModel);
         }
 
         [Authorize]
