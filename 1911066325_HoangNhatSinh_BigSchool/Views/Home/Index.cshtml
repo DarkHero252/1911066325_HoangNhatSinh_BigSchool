@@ -1,5 +1,6 @@
 ﻿@model _1911066325_HoangNhatSinh_BigSchool.ViewModels.CoursesViewModel
-@using PagedList.Mvc;
+@using _1911066325_HoangNhatSinh_BigSchool.Models
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Home Page";
 }
@@ -21,25 +22,35 @@
                         @course.Lecturer.Name
                         @if (Model.ShowAction)
                         {
-                            if (Model.Followings.Any(x => x.FolloweeId == course.Lecturer.Id))
+                            var User_ID = User.Identity.GetUserId();
+                            ApplicationDbContext _dbContext = new ApplicationDbContext();
+                            bool isFollowing = _dbContext.Followings.Any(f => f.FolloweeId == course.LecturerId && f.FollowerId == User_ID);
+                            if (isFollowing)
                             {
-                                <button data-user-id="@course.LecturerId" class="btn btn-default btn-sm js-toggle-follow">Following</button>
+                                <button class="btn btn-info btn-sm js-toggle-follow" data-user-id="@course.LecturerId">
+                                    Following
+                                </button>
                             }
                             else
                             {
-                                <button data-user-id="@course.LecturerId" class="btn btn-default btn-sm js-toggle-follow">Follow?</button>
+                                <button class="btn btn-default btn-sm js-toggle-follow" data-user-id="@course.LecturerId">
+                                    Follow
+                                </button>
                             }
-
                         }
                     </span>
                     <span class="category">
                         @course.Category.Name
                         @if (Model.ShowAction)
                         {
-                            if (Model.Attendances.Any(x => x.CourseId == course.Id))
+                            var User_ID = User.Identity.GetUserId();
+                            ApplicationDbContext _dbContext = new ApplicationDbContext();
+                            bool isGoing = _dbContext.Attendances.Any(a => a.CourseId == course.Id && a.AttendeeId == User_ID);
+
+                            if (isGoing)
                             {
-                                <button data-course-id="@course.Id" class="btn btn-sm btn-info">Going</button>
-                            }       
+                                <button data-course-id="@course.Id" class="btn btn-info btn-sm js-toggle-attendance">Going</button>
+                            }
                             else
                             {
                                 <button data-course-id="@course.Id" class="btn btn-default btn-sm js-toggle-attendance">Going?</button>

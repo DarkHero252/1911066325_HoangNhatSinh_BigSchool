@@ -1,4 +1,6 @@
 ﻿@model _1911066325_HoangNhatSinh_BigSchool.ViewModels.CoursesViewModel
+@using _1911066325_HoangNhatSinh_BigSchool.Models
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Home Page";
 }
@@ -21,14 +23,39 @@
                         @course.Lecturer.Name
                         @if (Model.ShowAction)
                         {
-                            <button data-user-id="@course.LecturerId" class="btn btn-default btn-sm js-toggle-follow">Follow?</button>
+                            var User_ID = User.Identity.GetUserId();
+                            ApplicationDbContext _dbContext = new ApplicationDbContext();
+                            bool isFollowing = _dbContext.Followings.Any(f => f.FolloweeId == course.LecturerId && f.FollowerId == User_ID);
+                            if (isFollowing)
+                            {
+                                <button class="btn btn-info btn-sm js-toggle-follow" data-user-id="@course.LecturerId">
+                                    Following
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-default btn-sm js-toggle-follow" data-user-id="@course.LecturerId">
+                                    Follow
+                                </button>
+                            }
                         }
                     </span>
                     <span class="category">
                         @course.Category.Name
                         @if (Model.ShowAction)
                         {
-                            <button data-course-id="@course.Id" class="btn btn-default btn-sm js-toggle-attendance">Going?</button>
+                            var User_ID = User.Identity.GetUserId();
+                            ApplicationDbContext _dbContext = new ApplicationDbContext();
+                            bool isGoing = _dbContext.Attendances.Any(a => a.CourseId == course.Id && a.AttendeeId == User_ID);
+
+                            if (isGoing)
+                            {
+                                <button data-course-id="@course.Id" class="btn btn-info btn-sm js-toggle-attendance">Going</button>
+                            }
+                            else
+                            {
+                                <button data-course-id="@course.Id" class="btn btn-default btn-sm js-toggle-attendance">Going?</button>
+                            }
                         }
                     </span>
                 </div>
@@ -39,10 +66,12 @@
     </ul>
 </div>
 
+</div>
+
 @section scripts{
     <script>
         $(function () {
-            $('.js-toggle-attendance').click(function (e) {
+            $(".js-toggle-attendance").click(function (e) {
                 var button = $(e.target);
                 $.post("/api/attendances", { CourseId: button.attr("data-course-id") }).done(function () {
                     button
@@ -55,7 +84,7 @@
             });
 
 
-            $('.js-toggle-follow').click(function (e) {
+            $(".js-toggle-follow").click(function (e) {
                 var button = $(e.target);
                 $.post("/api/followings", { FolloweeId: button.attr("data-user-id") }).done(function () {
                     button

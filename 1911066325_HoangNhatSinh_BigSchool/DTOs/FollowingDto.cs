@@ -7,7 +7,7 @@ namespace _1911066325_HoangNhatSinh_BigSchool.DTOs
 {
     public class FollowingDto
     {
-        public String FolloweeId { get; set; }
-        public string FollowerId { get; set; }
+        public string FolloweeId { get; set; }
+        //public string FollowerId { get; set; }
     }
 }
