@@ -165,5 +165,35 @@ namespace _1911066325_HoangNhatSinh_BigSchool.Controllers
             _dbContext.SaveChanges();
             return RedirectToAction("Index", "Home");
         }
+
+        public ActionResult Index (string searchString)
+        {
+            var upcommingCourses = _dbContext.Courses
+                                        .Include(c => c.Lecturer)
+                                        .Include(c => c.Category)
+                                        .Where(a => a.IsCanceled == false)
+                                        .Where(c => c.DateTime > DateTime.Now);
+
+            var userId = User.Identity.GetUserId();
+
+                if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                upcommingCourses = _dbContext.Courses
+                                        .Include(c => c.Lecturer)
+                                        .Where(a => a.Lecturer.ToString() == searchString)
+                                        .Where(a => a.IsCanceled == false)
+                                        .Where(c => c.DateTime > DateTime.Now);
+            }
+            var viewModel = new CoursesViewModel
+            {
+                UpcommingCourses = upcommingCourses,
+                ShowAction = User.Identity.IsAuthenticated,
+                Followings = _dbContext.Followings.Where(f => userId != null && f.FolloweeId == userId).ToList(),
+                Attendances = _dbContext.Attendances.Include(a => a.Course).ToList(),
+
+            };
+            return View(viewModel);
+        }
     }
 }

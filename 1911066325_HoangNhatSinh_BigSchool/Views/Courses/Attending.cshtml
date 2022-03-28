@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Home Page";
 }
-
+<h2>Những bạn lớp đang học</h2>
 <div class="row">
     <ul class="course">
         @foreach (var course in Model.UpcommingCourses)
@@ -18,9 +18,20 @@
                         @course.DateTime.ToString("dd")
                     </div>
                 </div>
+                <div>
+                    Trường: @course.Place
+                </div>
                 <div class="details">
                     <span class="lecturer">
-                        @course.Lecturer.Name
+                        Giảng viên: @course.Lecturer.Name
+                    </span>
+                    <span class="category">
+                        <br />
+                        Lớp: @course.Category.Name
+
+                    </span>
+                    <span>
+                        <br />
                         @if (Model.ShowAction)
                         {
                             var User_ID = User.Identity.GetUserId();
@@ -39,9 +50,6 @@
                                 </button>
                             }
                         }
-                    </span>
-                    <span class="category">
-                        @course.Category.Name
                         @if (Model.ShowAction)
                         {
                             var User_ID = User.Identity.GetUserId();
