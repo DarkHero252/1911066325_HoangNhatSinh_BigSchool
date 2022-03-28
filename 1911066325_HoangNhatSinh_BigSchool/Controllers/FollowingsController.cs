@@ -73,7 +73,7 @@ namespace _1911066325_HoangNhatSinh_BigSchool.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
-
+        
 
     }
 }
